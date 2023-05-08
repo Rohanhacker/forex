@@ -1,7 +1,6 @@
 package forex.domain
 
 import cats.Show
-
 sealed trait Currency
 
 object Currency {
@@ -39,4 +38,14 @@ object Currency {
     case "USD" => USD
   }
 
+  private val supportedCurrencies = List(AUD, CAD, CHF, EUR, GBP, NZD, JPY, SGD, USD)
+
+  def allPairs: List[Rate.Pair] =
+    supportedCurrencies
+      .combinations(2)
+      .flatMap(_.permutations)
+      .collect {
+        case Seq(from, to) => Rate.Pair(from, to)
+      }
+      .toList
 }
