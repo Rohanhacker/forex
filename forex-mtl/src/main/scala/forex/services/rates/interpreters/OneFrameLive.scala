@@ -40,7 +40,7 @@ class OneFrameLive[F[_]: Applicative](config : OneFrameConfig) extends Algebra[F
     cache.get(pair).flatMap {
       case (price, timestamp) =>
         val timeSinceFetch = Duration.between(timestamp.value, Timestamp.now.value).toSeconds()
-        if (timeSinceFetch < 60) Some(Rate(pair, price, timestamp)) else None
+        if (timeSinceFetch < config.cacheTtlSeconds) Some(Rate(pair, price, timestamp)) else None
     }
   }
 
