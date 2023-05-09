@@ -57,8 +57,10 @@ class OneFrameLive[F[_]: Applicative](config : OneFrameConfig) extends Algebra[F
   }
 
   private def getAllPairRates(): Either[Error, Map[Rate.Pair, (Price, Timestamp)]] = {
-    val response = HttpClient.newHttpClient.send(request, HttpResponse.BodyHandlers.ofString())
     for {
+      response <- Either.catchNonFatal(HttpClient.newHttpClient.send(request, HttpResponse.BodyHandlers.ofString()))
+        .left.map(error => Error.OneFrameLookupFailed(s"Failed to connect to OneFrame. Error: ${error.getMessage}")
+      )
       jsonResp <- decode[List[OneFrameRate]](response.body()).left.map(error =>
         Error.OneFrameLookupFailed(s"Fail to parse OneFrame response. Error: ${error.getMessage}")
       )
