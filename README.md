@@ -15,7 +15,7 @@ I've not implemented the cron job part as it requires a lot of setup and handlin
 - Using redis to memoize the results insted of local so that multiple instances can be created and use the same cache.
 - Unit tests.
 - using a cron job to call oneframe asynchronously in the background and storing the result in the cache.
-- Retring if oneframe returns an error. Maybe like 3 times before giving an error. 
+- Retry if oneframe returns an error. Maybe like 3 times before giving an error. 
 - OpenAPI specifications.
 
 ## Tests
